@@ -11,9 +11,9 @@ CREATE TABLE all_departments (
 CREATE TABLE all_roles (
     id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     job_title VARCHAR(100) NOT NULL,
-    department_id INT NOT NULL,
+    department_name VARCHAR(100) NOT NULL,
     salary INT NOT NULL,
-    FOREIGN KEY (department_id) REFERENCES all_departments(id)
+    -- FOREIGN KEY (department_name) REFERENCES all_departments(department_name)
 );
 
 CREATE TABLE all_employees (

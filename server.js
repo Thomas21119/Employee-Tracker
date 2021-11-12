@@ -1,12 +1,14 @@
 const cTable = require('console.table');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
+const PORT = process.env.PORT || 3001;
 
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
   password: '0000',
   database: 'employee_db',
+  port: '',
 });
 
 db.connect(function (err) {
@@ -34,14 +36,12 @@ function menu() {
       },
     ])
     .then(function (choice) {
-      console.log('before case');
       switch (choice.menuChoice) {
         case 'View All Departments':
           viewAllDepartments();
           break;
 
-        case 'View all Roles':
-          console.log('after case');
+        case 'View All Roles':
           viewAllRoles();
           break;
 

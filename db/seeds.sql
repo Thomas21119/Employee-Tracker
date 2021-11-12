@@ -4,12 +4,12 @@ VALUES ('Sales'),
 ('Finance'),
 ('Human Resources');
 
-INSERT INTO all_roles (job_title, salary)
-VALUES ('Lead Salesman', 150000),
-('Lead Opperations', 100000),
-('Lead Finance', 200000),
-('Human Resources Manager', 175000),
-('Salesman', 50000),
-('Opperations', 40000),
-('Accountant', 70000),
-('Team Trainer', 40000)
+INSERT INTO all_roles (job_title, department_name, salary)
+VALUES ('Lead Salesman', 'Sales', 100000),
+('Lead Opperations', 'Opperations', 100000),
+('Lead Finance', 'Finance', 100000),
+('Human Resources Manager', 'Human Resources', 100000),
+('Salesman', 'Sales', 100000),
+('Opperations', 'Opperations', 100000),
+('Accountant', 'Finance', 100000),
+('Team Trainer', 'Human Resources', 100000)
