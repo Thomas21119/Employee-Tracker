@@ -32,6 +32,7 @@ function menu() {
           'Add an Employee',
           'Add a Role',
           'Add a Department',
+          'quit menu',
         ],
       },
     ])
@@ -64,6 +65,8 @@ function menu() {
         case 'Add a Department':
           addDepartment();
           break;
+        default:
+          return;
       }
     });
 }
@@ -81,6 +84,17 @@ function viewAllDepartments() {
 
 function viewAllRoles() {
   db.query('SELECT * FROM all_roles;', function (err, res) {
+    if (err) {
+      throw err;
+    } else {
+      console.table(res);
+      menu();
+    }
+  });
+}
+
+function viewAllEmployees() {
+  db.query('SELECT * FROM all_employees;', function (err, res) {
     if (err) {
       throw err;
     } else {
