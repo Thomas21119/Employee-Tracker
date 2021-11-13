@@ -103,3 +103,11 @@ function viewAllEmployees() {
     }
   });
 }
+
+function updateEmployee() {}
+
+function addEmployee() {}
+
+function addRole() {}
+
+function addDepartment() {}

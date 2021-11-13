@@ -12,8 +12,16 @@ VALUES ('Lead Salesman', 1, 150000),
 ('Salesman', 1, 75000),
 ('Opperations', 2, 60000),
 ('Accountant', 3, 85000),
-('Team Trainer', 4, 50000)
+('Team Trainer', 4, 50000);
 
 INSERT INTO all_employees (employee_first, employee_last, role_id, manager_id)
-VALUES ('first', 'last', 1, null),
+VALUES 
+('first1', 'last1', 1, null),
+('first2', 'last2', 2, null),
+('first3', 'last3', 3, null),
+('first4', 'last4', 4, null),
+('first5', 'last5', 5, 1),
+('first6', 'last6', 6, 2),
+('first7', 'last7', 7, 3),
+('first8', 'last8', 8, 4);
 
