@@ -1,6 +1,7 @@
 const cTable = require('console.table');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
+const e = require('express');
 const PORT = process.env.PORT || 3001;
 
 const db = mysql.createConnection({
@@ -104,10 +105,120 @@ function viewAllEmployees() {
   });
 }
 
-function updateEmployee() {}
+function updateEmployee() {
+  let employeeUpdate = inquirer.prompt([
+    {
+      type: 'input',
+      name: 'newRole',
+      message: 'What is this employees new role',
+    },
+  ]);
+}
 
-function addEmployee() {}
+function addEmployee() {
+  let employeeAdd = inquirer.prompt([
+    {
+      type: 'input',
+      name: 'employeeFirst',
+      message: "What is the employee's first name",
+    },
+    {
+      type: 'input',
+      name: 'employeeLast',
+      message: "What is the employee's last name",
+    },
+    {
+      type: 'input',
+      name: 'employeeRole',
+      message: "What is the employee's role ID",
+    },
+    {
+      type: 'input',
+      name: 'employeeManager',
+      message: "What is the employee's Manager's ID",
+    },
+  ]);
+}
 
-function addRole() {}
+function addRole() {
+  let sql = 'SELECT * FROM all_departments';
+  db.query(sql, (err, res) => {
+    if (err) {
+      throw err;
+    } else {
+      let departmentNamesArray = [];
+      res.forEach((department) => {
+        departmentNamesArray.push(department.department_name);
+      });
+      inquirer
+        .prompt([
+          {
+            name: 'departmentChoice',
+            type: 'list',
+            message: 'which department does the new role belong in',
+            choices: departmentNamesArray,
+          },
+        ])
+        .then((answer) => {
+          let departmentId;
+          res.forEach((department) => {
+            if (answer.departmentName === department.department_name) {
+              departmentId = department.id;
+            }
+            console.log('departmentid' + departmentId);
+          });
+          inquirer
+            .prompt([
+              {
+                name: 'roleName',
+                type: 'input',
+                message: 'What is the new roles name',
+              },
+              {
+                name: 'roleSalary',
+                type: 'input',
+                message: 'What is the salary of this new role',
+              },
+            ])
+            .then((answer) => {
+              let createdRole = answer.roleName;
 
-function addDepartment() {}
+              let sql =
+                'INSERT INTO all_roles (job_title, salary, department_id) VALUES (?,?,?)';
+              let final = [createdRole, answer.roleSalary, departmentId];
+              db.query(sql, final, (err) => {
+                if (err) {
+                  throw err;
+                } else {
+                  console.log('role succesfully created');
+                  viewAllRoles();
+                }
+              });
+            });
+        });
+    }
+  });
+}
+
+// works as expected
+function addDepartment() {
+  let departmentAdd = inquirer
+    .prompt([
+      {
+        type: 'input',
+        name: 'departmentName',
+        message: 'what will this role be called',
+      },
+    ])
+    .then((answer) => {
+      let sql = 'INSERT INTO all_departments (department_name) VALUES (?)';
+      db.query(sql, answer.departmentName, (err, res) => {
+        if (err) {
+          throw err;
+        } else {
+          console.log(`${answer.departmentName} has been succesfully added`);
+          viewAllDepartments();
+        }
+      });
+    });
+}
