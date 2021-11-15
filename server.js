@@ -165,7 +165,7 @@ function addRole() {
         ])
         .then((answer) => {
           let departmentIdentification = answer.departmentChoice.split('-')[1];
-
+          console.log(departmentIdentification);
           inquirer
             .prompt([
               {
