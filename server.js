@@ -2,6 +2,8 @@ const cTable = require('console.table');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
 const e = require('express');
+const { rightPadder } = require('easy-table');
+const { query } = require('express');
 const PORT = process.env.PORT || 3001;
 
 const db = mysql.createConnection({
@@ -105,41 +107,171 @@ function viewAllEmployees() {
   });
 }
 
+// as expected
 function updateEmployee() {
-  let employeeUpdate = inquirer.prompt([
-    {
-      type: 'input',
-      name: 'newRole',
-      message: 'What is this employees new role',
-    },
-  ]);
+  let sql = `SELECT all_employees.id, all_employees.employee_first, all_employees.employee_last, all_roles.id AS "role_id"
+  FROM all_employees, all_roles, all_departments WHERE all_departments.id = all_roles.department_id AND all_roles.id = all_employees.role_id`;
+  db.query(sql, (err, response) => {
+    if (err) {
+      throw err;
+    } else {
+      let employeeNamesArray = [];
+      response.forEach((employee) => {
+        employeeNamesArray.push(
+          `${employee.employee_first} ${employee.employee_last}`
+        );
+      });
+      let sql = `SELECT all_roles.id, all_roles.job_title FROM all_roles`;
+      db.query(sql, (err, res) => {
+        if (err) {
+          throw err;
+        } else {
+          let rolesArray = [];
+          res.forEach((role) => {
+            rolesArray.push(role.job_title);
+          });
+          inquirer
+            .prompt([
+              {
+                name: 'chosenEmployee',
+                type: 'list',
+                message: 'which employee is being updated',
+                choices: employeeNamesArray,
+              },
+              {
+                name: 'chosenRole',
+                type: 'list',
+                message: 'what is this employees New role',
+                choices: rolesArray,
+              },
+            ])
+            .then((answer) => {
+              let newRoleId;
+              let employeeId;
+
+              res.forEach((role) => {
+                if (answer.chosenRole === role.job_title) {
+                  newRoleId = role.id;
+                }
+              });
+
+              response.forEach((employee) => {
+                if (
+                  answer.chosenEmployee ===
+                  `${employee.employee_first} ${employee.employee_last}`
+                ) {
+                  employeeId = employee.id;
+                }
+              });
+              console.log(newRoleId);
+              let sql = `UPDATE all_employees SET all_employees.role_id = ? WHERE all_employees.id = ?`;
+              db.query(sql, [newRoleId, employeeId], (err) => {
+                if (err) {
+                  throw err;
+                } else {
+                  console.log('employee role updated');
+                  menu();
+                }
+              });
+            });
+        }
+      });
+    }
+  });
 }
 
+// as expected besides error handling and null is available for name input
 function addEmployee() {
-  let employeeAdd = inquirer.prompt([
-    {
-      type: 'input',
-      name: 'employeeFirst',
-      message: "What is the employee's first name",
-    },
-    {
-      type: 'input',
-      name: 'employeeLast',
-      message: "What is the employee's last name",
-    },
-    {
-      type: 'input',
-      name: 'employeeRole',
-      message: "What is the employee's role ID",
-    },
-    {
-      type: 'input',
-      name: 'employeeManager',
-      message: "What is the employee's Manager's ID",
-    },
-  ]);
+  let employeeAdd = inquirer
+    .prompt([
+      {
+        type: 'input',
+        name: 'employeeFirst',
+        message: "What is the employee's first name",
+      },
+      {
+        type: 'input',
+        name: 'employeeLast',
+        message: "What is the employee's last name",
+      },
+    ])
+    .then((answers) => {
+      let newEmployeeData = [answers.employeeFirst, answers.employeeLast];
+      let sql = `SELECT id, job_title FROM all_roles`;
+      db.query(sql, (err, res) => {
+        if (err) {
+          throw err;
+        } else {
+          let rolesIdArray = [];
+          let rolesNameArray = [];
+          res.forEach((role) => {
+            rolesNameArray.push(role.job_title + ' ID:' + role.id);
+          });
+          inquirer
+            .prompt([
+              {
+                type: 'list',
+                name: 'role',
+                message: "What is the employee's role?",
+                choices: rolesNameArray,
+              },
+            ])
+            .then((roleChoice) => {
+              let role = roleChoice.role.split('ID:')[1];
+              newEmployeeData.push(role);
+              let sql = 'SELECT * FROM all_employees';
+              db.query(sql, (err, res) => {
+                if (err) {
+                  throw err;
+                } else {
+                  managers = [];
+                  res.forEach((employee) => {
+                    if (err) {
+                      throw err;
+                    } else {
+                      if (employee.manager_id === null) {
+                        managers.push(
+                          employee.employee_first +
+                            ' ' +
+                            employee.employee_last +
+                            ' ID:' +
+                            employee.id
+                        );
+                      }
+                    }
+                  });
+                  inquirer
+                    .prompt([
+                      {
+                        type: 'list',
+                        name: 'manager',
+                        message: 'who is this employees manager',
+                        choices: managers,
+                      },
+                    ])
+                    .then((managerChoice) => {
+                      let managerId = managerChoice.manager.split('ID:')[1];
+                      newEmployeeData.push(managerId);
+                      let sql = `INSERT INTO all_employees (employee_first, employee_last, role_id, manager_id)
+                      VALUES (?, ?, ?, ?)`;
+                      db.query(sql, newEmployeeData, (err) => {
+                        if (err) {
+                          throw err;
+                        } else {
+                          console.log('Employee has been added!');
+                          viewAllEmployees;
+                        }
+                      });
+                    });
+                }
+              });
+            });
+        }
+      });
+    });
 }
 
+// works as expected need error handling
 function addRole() {
   let sql = 'SELECT * FROM all_departments;';
   db.query(sql, (err, res) => {
@@ -165,7 +297,6 @@ function addRole() {
         ])
         .then((answer) => {
           let departmentIdentification = answer.departmentChoice.split('-')[1];
-          console.log(departmentIdentification);
           inquirer
             .prompt([
               {
@@ -181,7 +312,7 @@ function addRole() {
             ])
             .then((answer) => {
               let createdRole = answer.roleName;
-              console.log(answer.departmentIdentification);
+              let departmentId = departmentIdentification;
               let sql =
                 'INSERT INTO all_roles (job_title, salary, department_id) VALUES (?,?,?);';
               let final = [createdRole, answer.roleSalary, departmentId];
@@ -199,7 +330,7 @@ function addRole() {
   });
 }
 
-// works as expected
+// works as expected need error handling
 function addDepartment() {
   let departmentAdd = inquirer
     .prompt([
