@@ -110,13 +110,13 @@ This homework is graded based on the following criteria:
 
 ### Walkthrough Video: 27%
 
-- A walkthrough video that demonstrates the functionality of the employee tracker must be submitted, and a link to the video should be included in your README file.
+<!-- - A walkthrough video that demonstrates the functionality of the employee tracker must be submitted, and a link to the video should be included in your README file. -->
 
-- The walkthrough video must show all of the technical acceptance criteria being met.
+<!-- - The walkthrough video must show all of the technical acceptance criteria being met. -->
 
-- The walkthrough video must demonstrate how a user would invoke the application from the command line.
+<!-- - The walkthrough video must demonstrate how a user would invoke the application from the command line. -->
 
-- The walkthrough video must demonstrate a functional menu with the options outlined in the acceptance criteria.
+<!-- - The walkthrough video must demonstrate a functional menu with the options outlined in the acceptance criteria. -->
 
 ### Technical Acceptance Criteria: 40%
 
@@ -140,7 +140,7 @@ This homework is graded based on the following criteria:
 
 <!-- - Repository contains multiple descriptive commit messages. -->
 
-- Repository contains a high-quality README with description and a link to a walkthrough video.
+<!-- - Repository contains a high-quality README with description and a link to a walkthrough video. -->
 
 ### Application Quality 10%
 
@@ -164,7 +164,7 @@ Fulfilling any of the following can add up to 20 points to your grade. Note that
 
 You are required to submit BOTH of the following for review:
 
-- A walkthrough video demonstrating the functionality of the application.
+<!-- - A walkthrough video demonstrating the functionality of the application. -->
 
 <!-- - The URL of the GitHub repository, with a unique name and a README describing the project. -->
 

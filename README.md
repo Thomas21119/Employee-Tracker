@@ -22,3 +22,7 @@ Made by Thomas Wittwer
 ### Licence
 
 This work is available under the MIT Licensing rules
+
+### Walkthrough Video
+
+The walkthrough video is available at : 'https://youtu.be/c5c6s4s3vUc'
