@@ -136,7 +136,7 @@ This homework is graded based on the following criteria:
 
 <!-- - Repository follows best practices for file structure and naming conventions. -->
 
-- Repository follows best practices for class/id naming conventions, indentation, quality comments, etc.
+<!-- - Repository follows best practices for class/id naming conventions, indentation, quality comments, etc. -->
 
 <!-- - Repository contains multiple descriptive commit messages. -->
 
@@ -166,7 +166,7 @@ You are required to submit BOTH of the following for review:
 
 - A walkthrough video demonstrating the functionality of the application.
 
-- The URL of the GitHub repository, with a unique name and a README describing the project.
+<!-- - The URL of the GitHub repository, with a unique name and a README describing the project. -->
 
 ---
 

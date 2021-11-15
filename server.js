@@ -1,11 +1,10 @@
+// Dependencies
 const cTable = require('console.table');
 const mysql = require('mysql2');
 const inquirer = require('inquirer');
-const e = require('express');
 const { rightPadder } = require('easy-table');
-const { query } = require('express');
-const PORT = process.env.PORT || 3001;
 
+// mysql2 connection
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -14,12 +13,14 @@ const db = mysql.createConnection({
   port: '',
 });
 
+// connect to mysql2
 db.connect(function (err) {
   if (err) throw err;
   console.log('mysql succesfully connected');
   menu();
 });
 
+// main menu
 function menu() {
   let menuChoice = inquirer
     .prompt([
@@ -39,6 +40,7 @@ function menu() {
         ],
       },
     ])
+    // based on inquirer choice run function
     .then(function (choice) {
       switch (choice.menuChoice) {
         case 'View All Departments':
@@ -74,6 +76,7 @@ function menu() {
     });
 }
 
+// view all departments viewing id and department name
 function viewAllDepartments() {
   let sql = `SELECT all_departments.id AS id, all_departments.department_name AS all_departments FROM all_departments`;
   db.query(sql, function (err, res) {
@@ -86,7 +89,7 @@ function viewAllDepartments() {
   });
 }
 
-// perfect
+// View all Roles by role id, job title and the department its under
 function viewAllRoles() {
   let sql = `SELECT all_roles.id, all_roles.job_title, all_departments.department_name AS all_departments
                   FROM all_roles
@@ -101,7 +104,7 @@ function viewAllRoles() {
   });
 }
 
-// perfect
+// View all employees by id, then their first name, last name. their role, department and their salary
 function viewAllEmployees() {
   let sql = `SELECT all_employees.id, 
                   all_employees.employee_first, 
@@ -123,7 +126,7 @@ function viewAllEmployees() {
   });
 }
 
-// as expected
+// update employee based on their id and the roles id
 function updateEmployee() {
   let sql = `SELECT all_employees.id, all_employees.employee_first, all_employees.employee_last, all_roles.id AS "role_id"
   FROM all_employees, all_roles, all_departments WHERE all_departments.id = all_roles.department_id AND all_roles.id = all_employees.role_id`;
@@ -133,6 +136,7 @@ function updateEmployee() {
     } else {
       let employeeNamesArray = [];
       response.forEach((employee) => {
+        // create a new array of employee names to input into inquirer
         employeeNamesArray.push(
           `${employee.employee_first} ${employee.employee_last}`
         );
@@ -143,6 +147,7 @@ function updateEmployee() {
           throw err;
         } else {
           let rolesArray = [];
+          // create a new array of job titles to input into inquirer
           res.forEach((role) => {
             rolesArray.push(role.job_title);
           });
@@ -165,12 +170,14 @@ function updateEmployee() {
               let newRoleId;
               let employeeId;
 
+              // for each role check if it matches the chosen role for employee and if so make it a new variable
               res.forEach((role) => {
                 if (answer.chosenRole === role.job_title) {
                   newRoleId = role.id;
                 }
               });
 
+              // for each name check if it matches the chosen name for the employee and if so make it a new variable
               response.forEach((employee) => {
                 if (
                   answer.chosenEmployee ===
@@ -179,8 +186,8 @@ function updateEmployee() {
                   employeeId = employee.id;
                 }
               });
-              console.log(newRoleId);
               let sql = `UPDATE all_employees SET all_employees.role_id = ? WHERE all_employees.id = ?`;
+              // update the employee
               db.query(sql, [newRoleId, employeeId], (err) => {
                 if (err) {
                   throw err;
@@ -196,7 +203,7 @@ function updateEmployee() {
   });
 }
 
-// as expected besides error handling and null is available for name input
+// add an employee asking for their name and role and manager
 function addEmployee() {
   let employeeAdd = inquirer
     .prompt([
@@ -287,7 +294,7 @@ function addEmployee() {
     });
 }
 
-// works as expected need error handling
+// add role based on department role name and role salary
 function addRole() {
   let sql = 'SELECT * FROM all_departments;';
   db.query(sql, (err, res) => {
@@ -346,7 +353,7 @@ function addRole() {
   });
 }
 
-// works as expected need error handling
+// add a department given a name
 function addDepartment() {
   let departmentAdd = inquirer
     .prompt([
