@@ -141,14 +141,17 @@ function addEmployee() {
 }
 
 function addRole() {
-  let sql = 'SELECT * FROM all_departments';
+  let sql = 'SELECT * FROM all_departments;';
   db.query(sql, (err, res) => {
     if (err) {
       throw err;
     } else {
       let departmentNamesArray = [];
       res.forEach((department) => {
-        departmentNamesArray.push(department.department_name);
+        departmentNamesArray.push(
+          department.department_name + '-' + department.department_id
+        );
+        console.log(departmentNamesArray);
       });
       inquirer
         .prompt([
