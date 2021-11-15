@@ -147,11 +147,12 @@ function addRole() {
       throw err;
     } else {
       let departmentNamesArray = [];
+      let departmentIdArray = [];
       res.forEach((department) => {
         departmentNamesArray.push(
-          department.department_name + '-' + department.department_id
+          department.department_name + '-' + department.id
         );
-        console.log(departmentNamesArray);
+        departmentIdArray.push(department.id);
       });
       inquirer
         .prompt([
@@ -163,13 +164,8 @@ function addRole() {
           },
         ])
         .then((answer) => {
-          let departmentId;
-          res.forEach((department) => {
-            if (answer.departmentName === department.department_name) {
-              departmentId = department.id;
-            }
-            console.log('departmentid' + departmentId);
-          });
+          let departmentIdentification = answer.departmentChoice.split('-')[1];
+
           inquirer
             .prompt([
               {
@@ -185,9 +181,9 @@ function addRole() {
             ])
             .then((answer) => {
               let createdRole = answer.roleName;
-
+              console.log(answer.departmentIdentification);
               let sql =
-                'INSERT INTO all_roles (job_title, salary, department_id) VALUES (?,?,?)';
+                'INSERT INTO all_roles (job_title, salary, department_id) VALUES (?,?,?);';
               let final = [createdRole, answer.roleSalary, departmentId];
               db.query(sql, final, (err) => {
                 if (err) {
@@ -214,7 +210,7 @@ function addDepartment() {
       },
     ])
     .then((answer) => {
-      let sql = 'INSERT INTO all_departments (department_name) VALUES (?)';
+      let sql = 'INSERT INTO all_departments (department_name) VALUES (?);';
       db.query(sql, answer.departmentName, (err, res) => {
         if (err) {
           throw err;
