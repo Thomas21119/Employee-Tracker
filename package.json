@@ -1,0 +1,26 @@
+{
+  "name": "week-11-homework",
+  "version": "1.0.0",
+  "description": "This project allows employers to keep track of their employees in a mysql database, which allows for updating, adding and looking over current and new employees.",
+  "main": "server.js",
+  "dependencies": {
+    "console.table": "^0.10.0",
+    "inquirer": "^8.2.0",
+    "mysql2": "^2.3.3"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Thomas21119/Employee-Tracker.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Thomas21119/Employee-Tracker/issues"
+  },
+  "homepage": "https://github.com/Thomas21119/Employee-Tracker#readme"
+}

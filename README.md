@@ -7,7 +7,7 @@ This project allows employers to keep track of their employees in a mysql databa
 ### Installation
 
 To Install this project you must use either your ssh key, using 'git@github.com:Thomas21119/Employee-Tracker.git' or through https using 'https://github.com/Thomas21119/Employee-Tracker.git'. To install its dependencies go to the appropriate terminal location and run npm install. Next login to mysql and run the following command:  
-<br> source db/schema.sql
+<br> source db/schema.sql, npm install inquirer, npm install mysql2, npm install console.table
 <br> if you would like to use our preset library to test it out please also run the command:
 <br> source db/seeds.sql
 

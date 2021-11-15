@@ -282,7 +282,8 @@ function addEmployee() {
                           throw err;
                         } else {
                           console.log('Employee has been added!');
-                          viewAllEmployees;
+                          viewAllEmployees();
+                          menu();
                         }
                       });
                     });
