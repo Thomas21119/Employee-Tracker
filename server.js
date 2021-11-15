@@ -75,7 +75,8 @@ function menu() {
 }
 
 function viewAllDepartments() {
-  db.query('SELECT * FROM all_departments;', function (err, res) {
+  let sql = `SELECT all_departments.id AS id, all_departments.department_name AS all_departments FROM all_departments`;
+  db.query(sql, function (err, res) {
     if (err) {
       throw err;
     } else {
@@ -85,8 +86,12 @@ function viewAllDepartments() {
   });
 }
 
+// perfect
 function viewAllRoles() {
-  db.query('SELECT * FROM all_roles;', function (err, res) {
+  let sql = `SELECT all_roles.id, all_roles.job_title, all_departments.department_name AS all_departments
+                  FROM all_roles
+                  INNER JOIN all_departments ON all_roles.department_id = all_departments.id`;
+  db.query(sql, function (err, res) {
     if (err) {
       throw err;
     } else {
@@ -96,8 +101,19 @@ function viewAllRoles() {
   });
 }
 
+// perfect
 function viewAllEmployees() {
-  db.query('SELECT * FROM all_employees;', function (err, res) {
+  let sql = `SELECT all_employees.id, 
+                  all_employees.employee_first, 
+                  all_employees.employee_last, 
+                  all_roles.job_title, 
+                  all_departments.department_name AS 'all_departments', 
+                  all_roles.salary
+                  FROM all_employees, all_roles, all_departments 
+                  WHERE all_departments.id = all_roles.department_id 
+                  AND all_roles.id = all_employees.role_id
+                  ORDER BY all_employees.id ASC`;
+  db.query(sql, function (err, res) {
     if (err) {
       throw err;
     } else {
